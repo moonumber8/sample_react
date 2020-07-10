@@ -1,14 +1,35 @@
 import React, { Component } from "react";
 import "./App.css";
 export default class bander extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      datas: [],
+    };
+  }
+  componentDidMount() {
+    fetch("http://localhost:3080/api/v1/authen/topmovie")
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({
+          isLoaded: true,
+          datas: result.data,
+        });
+      });
+  }
   render() {
+    const datalist = this.state.datas;
     return (
+      
       <div>
-        <div className="row align-items-center my-5">
+        {datalist.map((item) => (
+        <div className="row align-items-center my-2">
           <div className="col-lg-7">
             <img
               className="img-fluid rounded mb-4 mb-lg-0"
-              src="http://placehold.it/900x400"
+              src={item.poster}
+              width={300}
+              height={400}
             />
           </div>
           <div className="col-lg-5">
@@ -24,6 +45,7 @@ export default class bander extends Component {
             </a>
           </div>
         </div>
+        ))}
       </div>
     );
   }
